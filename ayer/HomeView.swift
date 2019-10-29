@@ -27,7 +27,7 @@ struct WeatherDetails: View {
                 .foregroundColor(.white)
                 .font(.title)
             
-             Text("Humidity")
+            Text("Humidity")
                 .foregroundColor(.white)
                 .font(.title)
                 .fontWeight(.bold)
@@ -60,18 +60,45 @@ struct TodaysWeatherCard: View {
     }
 }
 
+
+struct NextDaysCard: View {
+    
+    let weather: Weather
+    
+    let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    
+    var body: some View {
+        VStack {
+            Text("\(days.randomElement()!)")
+                .foregroundColor(.white)
+                .font(.title)
+            
+            Image("icon_sun")
+            
+            Text("\(weather.humidity)")
+                .foregroundColor(.white)
+                .font(.title)
+        }
+    }
+}
+
+
 struct NextDaysView: View {
     //change this
   let days: String
   let color: UIColor
+    let weather: Weather
     
   var body: some View {
-      // status image
+
     Color(color)
-//          .resizable()
-          .frame(width: 110, height: 180)
+          .frame(width: 160, height: 200)
           .border(Color.gray.opacity(0.5), width: 0.5)
-          .cornerRadius(8)
+          .cornerRadius(30)
+        .overlay(
+            NextDaysCard(weather: weather),
+            alignment: .center
+        )
    }
 }
 
@@ -114,12 +141,13 @@ struct HomeView: View {
             
             Text("Next 15 Days")
                 .font(.title)
+                .fontWeight(.bold)
                 .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
             
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
                     ForEach(0..<15) {_ in
-                        NextDaysView(days: "", color: self.arrayOfColors.randomElement()!)
+                        NextDaysView(days: "", color: self.arrayOfColors.randomElement()!, weather: self.weather)
                     }
                 }
                 .padding(.leading, 10)

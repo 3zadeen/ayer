@@ -9,9 +9,132 @@
 import SwiftUI
 
 
-struct HomeView: View {
+
+struct WeatherDetails: View {
+    
+    var weather: Weather
+
+    let viviColor = Color(red: 168/255, green: 162/255, blue: 255/255)
+    
     var body: some View {
-        Text("Second Page")
+        VStack(alignment: .center, spacing: 15) {
+            Text("\(weather.temperature)")
+                .foregroundColor(.white)
+                .font(.system(size: 100))
+                .fontWeight(.bold)
+            
+            Text("\(weather.label)")
+                .foregroundColor(.white)
+                .font(.title)
+            
+             Text("Humidity")
+                .foregroundColor(.white)
+                .font(.title)
+                .fontWeight(.bold)
+            
+            Text("\(weather.humidity)")
+                .foregroundColor(viviColor)
+                .font(.title)
+                .fontWeight(.bold)
+        }
+    }
+}
+
+struct TodaysWeatherCard: View {
+    
+    var weather: Weather
+
+    var body: some View {
+        VStack {
+            Image("cloud_sun")
+                .overlay(
+                    Image("cloud")
+                        .frame(width:135, height:115),
+                  alignment: .bottomTrailing
+                )
+                .overlay(
+                    WeatherDetails(weather: weather),
+                    alignment: .center
+                )
+        }
+    }
+}
+
+struct NextDaysView: View {
+    //change this
+  let days: String
+  let color: UIColor
+    
+  var body: some View {
+      // status image
+    Color(color)
+//          .resizable()
+          .frame(width: 110, height: 180)
+          .border(Color.gray.opacity(0.5), width: 0.5)
+          .cornerRadius(8)
+   }
+}
+
+
+struct CustomColors {
+    static let mixedGreen = UIColor.init(netHex: 0x28E0AE)
+    static let pink = UIColor.init(netHex: 0xFF0090)
+    static let yellow = UIColor.init(netHex: 0xFFAE00)
+    static let sky = UIColor.init(netHex: 0x0090FF)
+    static let red = UIColor.init(netHex: 0xDC0000)
+    static let darkBlue = UIColor.init(netHex: 0x0051FF)
+}
+
+
+struct HomeView: View {
+    
+    @State private var selectedCategory = 0
+    
+    let weather = Weather()
+    
+    
+    let categories = ["Today", "Tomorrow", "Next Week"]
+    
+    let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            Picker("Categories", selection: $selectedCategory) {
+                ForEach(0..<categories.count) {
+                    Text("\(self.categories[$0])")
+                }
+            }.pickerStyle(SegmentedPickerStyle())
+            .background(Color.white)
+            
+            
+            TodaysWeatherCard(weather: weather)
+            
+            Spacer()
+            
+            Text("Next 15 Days")
+                .font(.title)
+                .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
+            
+            ScrollView(.horizontal) {
+                HStack(spacing: 10) {
+                    ForEach(0..<15) {_ in
+                        NextDaysView(days: "", color: self.arrayOfColors.randomElement()!)
+                    }
+                }
+                .padding(.leading, 10)
+            }
+            .frame(height: 190)
+            
+            Spacer()
+                
+        }
+        .navigationBarTitle("City", displayMode: .inline)
+        .navigationBarItems(trailing:
+            Image(systemName: SFSymbolName.magnifyingGlass)
+        )
+        .navigationBarBackButtonHidden(true)
+        
     }
 }
 
@@ -21,3 +144,11 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
     }
 }
+
+
+struct Weather {
+    let temperature = "25°"
+    let label = "Clouds & sun"
+    let humidity = "35°"
+}
+

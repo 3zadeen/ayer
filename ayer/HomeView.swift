@@ -67,17 +67,34 @@ struct NextDaysCard: View {
     
     let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     
+    let icons = ["icon_sun", "icon_cloud", "icon_rain", "icon_wind"]
+
+    let viviColor = Color(red: 237/255, green: 240/255, blue: 245/255)
+    
     var body: some View {
         VStack {
             Text("\(days.randomElement()!)")
                 .foregroundColor(.white)
                 .font(.title)
             
-            Image("icon_sun")
+            Image(icons.randomElement()!)
+                .frame(height:50)
             
             Text("\(weather.humidity)")
                 .foregroundColor(.white)
                 .font(.title)
+            
+            HStack(spacing: 30) {
+                Text("\(weather.humidity)")
+                    .foregroundColor(viviColor)
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+                
+                Text("\(weather.humidity)")
+                    .foregroundColor(.white)
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+            }
         }
     }
 }
@@ -92,13 +109,15 @@ struct NextDaysView: View {
   var body: some View {
 
     Color(color)
-          .frame(width: 160, height: 200)
+          .frame(width: 160, height: 220)
           .border(Color.gray.opacity(0.5), width: 0.5)
           .cornerRadius(30)
         .overlay(
             NextDaysCard(weather: weather),
             alignment: .center
         )
+        .shadow(color: Color.gray.opacity(0.8), radius: 5, x: 0, y: 5)
+    
    }
 }
 
@@ -119,30 +138,33 @@ struct HomeView: View {
     
     let weather = Weather()
     
-    
+//    red: 93/255, green: 80/255, blue: 254/255)
     let categories = ["Today", "Tomorrow", "Next Week"]
     
     let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(alignment: .leading, spacing: 20) {
             Spacer()
             Picker("Categories", selection: $selectedCategory) {
                 ForEach(0..<categories.count) {
                     Text("\(self.categories[$0])")
                 }
             }.pickerStyle(SegmentedPickerStyle())
-            .background(Color.white)
-            
-            
+                .background(Color.white)
+                .cornerRadius(20)
+        
             TodaysWeatherCard(weather: weather)
+                .padding(.leading, 20)
             
             Spacer()
             
             Text("Next 15 Days")
-                .font(.title)
+                .font(.system(size: 20))
                 .fontWeight(.bold)
                 .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
+                .padding(.leading, 20)
+                .padding(.bottom, 20)
             
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
@@ -151,13 +173,16 @@ struct HomeView: View {
                     }
                 }
                 .padding(.leading, 10)
+                .padding(.trailing, 10)
+            
+                Spacer(minLength: 20)
             }
             .frame(height: 190)
             
             Spacer()
                 
         }
-        .navigationBarTitle("City", displayMode: .inline)
+        .navigationBarTitle("Kuala Lumpur, Malaysia", displayMode: .inline)
         .navigationBarItems(trailing:
             Image(systemName: SFSymbolName.magnifyingGlass)
         )

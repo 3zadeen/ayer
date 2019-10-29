@@ -21,16 +21,16 @@ struct ExploreView: View {
                 Image("icon_city")
                     .padding(.top)
                 ZStack(alignment: .bottom) {
-                    Button("Explore") {
-                        
+                    NavigationLink(destination: HomeView()) {
+                        Text("Explore")
                     }
-                    .padding(50)
-                    .foregroundColor(black)
-                    .background(Color(.white))
-                    .frame(width: 190, height: 50, alignment: .center)
-                    .font(.title)
-                    .cornerRadius(25)
-                    .offset(x: 0, y: -100)
+                        .padding(50)
+                        .foregroundColor(black)
+                        .background(Color(.white))
+                        .frame(width: 190, height: 50, alignment: .center)
+                        .font(.title)
+                        .cornerRadius(25)
+                        .offset(x: 0, y: -100)
                 }
             }
             .background(LinearGradient(gradient: .init(colors: [lightBlue, darkBlue]), startPoint: .top, endPoint: .bottom))
@@ -44,3 +44,4 @@ struct ExploreView_Previews: PreviewProvider {
         ExploreView()
     }
 }
+

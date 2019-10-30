@@ -16,6 +16,7 @@
 		7DD238E423685BE100A6D294 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD238E323685BE100A6D294 /* HomeView.swift */; };
 		7DD238E62368677300A6D294 /* SFSymbolName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD238E52368677300A6D294 /* SFSymbolName.swift */; };
 		7DD238E923687DFF00A6D294 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD238E823687DFF00A6D294 /* UIColor+Extension.swift */; };
+		7DD238EC236931C700A6D294 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD238EB236931C700A6D294 /* WeatherData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		7DD238E323685BE100A6D294 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7DD238E52368677300A6D294 /* SFSymbolName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbolName.swift; sourceTree = "<group>"; };
 		7DD238E823687DFF00A6D294 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		7DD238EB236931C700A6D294 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 		7D6D304C23671E240031A6A9 /* ayer */ = {
 			isa = PBXGroup;
 			children = (
+				7DD238EA236931A600A6D294 /* Model */,
 				7D6D304D23671E240031A6A9 /* AppDelegate.swift */,
 				7D6D304F23671E240031A6A9 /* SceneDelegate.swift */,
 				7D6D305123671E240031A6A9 /* ExploreView.swift */,
@@ -90,6 +93,14 @@
 				7DD238E823687DFF00A6D294 /* UIColor+Extension.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		7DD238EA236931A600A6D294 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7DD238EB236931C700A6D294 /* WeatherData.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 			files = (
 				7D6D304E23671E240031A6A9 /* AppDelegate.swift in Sources */,
 				7DD238E423685BE100A6D294 /* HomeView.swift in Sources */,
+				7DD238EC236931C700A6D294 /* WeatherData.swift in Sources */,
 				7D6D305023671E240031A6A9 /* SceneDelegate.swift in Sources */,
 				7DD238E923687DFF00A6D294 /* UIColor+Extension.swift in Sources */,
 				7D6D305223671E240031A6A9 /* ExploreView.swift in Sources */,

@@ -68,8 +68,7 @@ struct NextDaysCard: View {
     let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     
     let icons = ["icon_sun", "icon_cloud", "icon_rain", "icon_wind"]
-
-    let viviColor = Color(red: 237/255, green: 240/255, blue: 245/255)
+    let viviColor = Color(red: 187/255, green: 192/255, blue: 212/255)
     
     var body: some View {
         VStack {

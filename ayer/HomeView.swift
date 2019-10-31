@@ -12,18 +12,18 @@ import SwiftUI
 
 struct WeatherDetails: View {
     
-    var weather: Weather
+    var weatherData: HomeViewModel
 
     let viviColor = Color(red: 168/255, green: 162/255, blue: 255/255)
     
     var body: some View {
         VStack(alignment: .center, spacing: 15) {
-            Text("\(weather.temperature)")
+            Text("\(weatherData.temperature)")
                 .foregroundColor(.white)
                 .font(.system(size: 100))
                 .fontWeight(.bold)
             
-            Text("\(weather.label)")
+            Text("\(weatherData.description)")
                 .foregroundColor(.white)
                 .font(.title)
             
@@ -32,7 +32,7 @@ struct WeatherDetails: View {
                 .font(.title)
                 .fontWeight(.bold)
             
-            Text("\(weather.humidity)")
+            Text("\(weatherData.humidity)")
                 .foregroundColor(viviColor)
                 .font(.title)
                 .fontWeight(.bold)
@@ -42,7 +42,7 @@ struct WeatherDetails: View {
 
 struct TodaysWeatherCard: View {
     
-    var weather: Weather
+    var weatherData: HomeViewModel
 
     var body: some View {
         VStack {
@@ -53,7 +53,7 @@ struct TodaysWeatherCard: View {
                   alignment: .bottomTrailing
                 )
                 .overlay(
-                    WeatherDetails(weather: weather),
+                    WeatherDetails(weatherData: weatherData),
                     alignment: .center
                 )
         }
@@ -134,10 +134,13 @@ struct CustomColors {
 struct HomeView: View {
     
     @State private var selectedCategory = 0
+    @State private var cityName = ""
     
     let weather = Weather()
     
-//    red: 93/255, green: 80/255, blue: 254/255)
+    @ObservedObject var homeViewModel = HomeViewModel()
+
+
     let categories = ["Today", "Tomorrow", "Next Week"]
     
     let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
@@ -153,7 +156,7 @@ struct HomeView: View {
                 .background(Color.white)
                 .cornerRadius(20)
         
-            TodaysWeatherCard(weather: weather)
+            TodaysWeatherCard(weatherData: homeViewModel)
                 .padding(.leading, 20)
             
             Spacer()
@@ -181,12 +184,23 @@ struct HomeView: View {
             Spacer()
                 
         }
-        .navigationBarTitle("Kuala Lumpur, Malaysia", displayMode: .inline)
+        .navigationBarTitle(cityName)
+        .onAppear(perform: SetNavBarTitle)
         .navigationBarItems(trailing:
             Image(systemName: SFSymbolName.magnifyingGlass)
         )
+        .navigationBarItems(trailing:
+            Button(action: {
+//                self.homeViewModel.fetchWeatherData()
+            }, label: {
+                Text("TEST")
+            })
+        )
         .navigationBarBackButtonHidden(true)
-        
+    }
+    
+    func SetNavBarTitle() {
+        cityName = homeViewModel.name
     }
 }
 

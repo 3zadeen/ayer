@@ -7,18 +7,24 @@
 //
 
 import Foundation
-
+import SwiftUI
 
 struct WeatherData : Decodable {
     
     let date    : Int
     let main    : Main
-    let weather : WeatherCondition
+    let weather : [WeatherCondition]
+    let name    : String
     
     enum CodingKeys: String, CodingKey {
         case date    = "dt"
         case main    = "main"
         case weather = "weather"
+        case name    = "name"
+    }
+    
+    init?() {
+        return nil
     }
 }
 
@@ -26,8 +32,8 @@ struct WeatherData : Decodable {
 struct Main : Decodable {
     
     let temperature : Double
-    let pressure    : Double
-    let humidity    : Double
+    let pressure    : Int
+    let humidity    : Int
     let minimumTemp : Double
     let maximumTemp : Double
     
@@ -53,12 +59,25 @@ struct WeatherCondition : Decodable {
     }
 }
 
+struct City : Decodable {
+    
+    let name     : String
+    let country  : String
+    
+    enum CodingKeys: String, CodingKey {
+        case name    = "name"
+        case country = "country"
+    }
+}
+
 
 struct WeatherList : Decodable {
     
-    let list : WeatherData
+    let list : [WeatherData]
+    let city : City
     
     enum CodingKeys: String, CodingKey {
         case list = "list"
+        case city = "city"
     }
 }

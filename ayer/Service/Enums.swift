@@ -23,3 +23,9 @@ public enum TemperatureUnit: String {
     case metric = "metric"
     case imperial = "imperial"
 }
+
+
+public enum APIError: Error {
+    case parsingError(description: String)
+    case networkError(description: String)
+}

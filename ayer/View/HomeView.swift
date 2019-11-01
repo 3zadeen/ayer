@@ -13,7 +13,7 @@ import SwiftUI
 struct WeatherDetails: View {
     
     var weatherData: HomeViewModel
-
+    
     let viviColor = Color(red: 168/255, green: 162/255, blue: 255/255)
     
     var body: some View {
@@ -43,20 +43,18 @@ struct WeatherDetails: View {
 struct TodaysWeatherCard: View {
     
     var weatherData: HomeViewModel
-
+    
     var body: some View {
-        VStack {
-            Image("cloud_sun")
-                .overlay(
-                    Image("cloud")
-                        .frame(width:135, height:115),
-                  alignment: .bottomTrailing
-                )
-                .overlay(
-                    WeatherDetails(weatherData: weatherData),
-                    alignment: .center
-                )
-        }
+        Image("cloud_sun")
+            .overlay(
+                Image("cloud")
+                    .frame(width:135, height:115),
+                alignment: .bottomTrailing
+        )
+            .overlay(
+                WeatherDetails(weatherData: weatherData),
+                alignment: .center
+        )
     }
 }
 
@@ -85,7 +83,7 @@ struct NextDaysCard: View {
     let viviColor = Color(red: 187/255, green: 192/255, blue: 212/255)
     
     var body: some View {
-
+        
         VStack {
             Text("\(dailyWeather.day)")
                 .foregroundColor(.white)
@@ -129,22 +127,22 @@ struct NextDaysCard: View {
 
 
 struct NextDaysView: View {
-  let color: UIColor
-  let dailyWeather: DailyWeatherViewModel
+    let color: UIColor
+    let dailyWeather: DailyWeatherViewModel
     
-  var body: some View {
-
-    Color(color)
-          .frame(width: 160, height: 220)
-          .border(Color.gray.opacity(0.5), width: 0.5)
-          .cornerRadius(30)
-        .overlay(
-            NextDaysCard(dailyWeather: dailyWeather),
-            alignment: .center
+    var body: some View {
+        
+        Color(color)
+            .frame(width: 160, height: 220)
+            .border(Color.gray.opacity(0.5), width: 0.5)
+            .cornerRadius(30)
+            .overlay(
+                NextDaysCard(dailyWeather: dailyWeather),
+                alignment: .center
         )
-        .shadow(color: Color.gray.opacity(0.8), radius: 5, x: 0, y: 5)
-    
-   }
+            .shadow(color: Color.gray.opacity(0.8), radius: 5, x: 0, y: 5)
+        
+    }
 }
 
 
@@ -159,29 +157,19 @@ struct CustomColors {
 
 
 struct HomeView: View {
-    
+    @State private var isShowCurrentWeather = false
     @State private var selectedCategory = 0
     @State private var cityName = ""
     
     @ObservedObject var homeViewModel = HomeViewModel()
     @ObservedObject var weeklyWeatherViewModel = WeeklyWeatherViewModel()
-
-
-    let categories = ["Today", "Tomorrow", "Next Week"]
     
     let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Spacer()
-            Picker("Categories", selection: $selectedCategory) {
-                ForEach(0..<categories.count) {
-                    Text("\(self.categories[$0])")
-                }
-            }.pickerStyle(SegmentedPickerStyle())
-                .background(Color.white)
-                .cornerRadius(20)
-        
+            
             TodaysWeatherCard(weatherData: homeViewModel)
                 .padding(.leading, 20)
             
@@ -202,27 +190,18 @@ struct HomeView: View {
                 }
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
-            
+                
                 Spacer(minLength: 20)
             }
             .frame(height: 190)
             
             Spacer()
-                
+            
         }
         .navigationBarTitle(cityName)
         .onAppear(perform: SetNavBarTitle)
         .navigationBarItems(trailing:
             Image(systemName: SFSymbolName.magnifyingGlass)
-        )
-        .navigationBarItems(trailing:
-            Button(action: {
-                
-//                print("TESTING:\(self.weeklyWeatherViewModel)")
-//                self.homeViewModel.fetchWeatherData()
-            }, label: {
-                Text("TEST")
-            })
         )
         .navigationBarBackButtonHidden(true)
     }

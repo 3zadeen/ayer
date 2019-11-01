@@ -61,49 +61,67 @@ struct TodaysWeatherCard: View {
 }
 
 
+struct IconView: View {
+    @ObservedObject var iconViewModel: IconViewModel
+    
+    init(iconName: String) {
+        iconViewModel = IconViewModel(iconName: iconName)
+    }
+    
+    var body: some View {
+        Image(uiImage: (((iconViewModel.data.isEmpty) ? UIImage(named: "icon_sun") : UIImage(data:iconViewModel.data))!))
+    }
+}
+
 struct NextDaysCard: View {
     
-    let weather: Weather
+    let dailyWeather: DailyWeatherViewModel
     
-    let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    @State var iconName = ""
+    
     
     let icons = ["icon_sun", "icon_cloud", "icon_rain", "icon_wind"]
+    
     let viviColor = Color(red: 187/255, green: 192/255, blue: 212/255)
     
     var body: some View {
+
         VStack {
-            Text("\(days.randomElement()!)")
+            Text("\(dailyWeather.day)")
                 .foregroundColor(.white)
                 .font(.title)
             
-            Image(icons.randomElement()!)
-                .frame(height:50)
+            Text("\(dailyWeather.date)")
+                .foregroundColor(.white)
+                .font(.footnote)
             
-            Text("\(weather.humidity)")
+            IconView(iconName: dailyWeather.icon)
+            
+            Text("\(dailyWeather.temperature)")
                 .foregroundColor(.white)
                 .font(.title)
             
             HStack(spacing: 30) {
-                Text("\(weather.humidity)")
+                Text("\(dailyWeather.minTemperature)")
                     .foregroundColor(viviColor)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                 
-                Text("\(weather.humidity)")
+                Text("\(dailyWeather.maxTemperature)")
                     .foregroundColor(.white)
                     .font(.system(size: 20))
                     .fontWeight(.bold)
             }
-        }
+        }.onAppear(perform: {
+            self.iconName = self.dailyWeather.icon
+        })
     }
 }
 
 
 struct NextDaysView: View {
-    //change this
-  let days: String
   let color: UIColor
-    let weather: Weather
+  let dailyWeather: DailyWeatherViewModel
     
   var body: some View {
 
@@ -112,7 +130,7 @@ struct NextDaysView: View {
           .border(Color.gray.opacity(0.5), width: 0.5)
           .cornerRadius(30)
         .overlay(
-            NextDaysCard(weather: weather),
+            NextDaysCard(dailyWeather: dailyWeather),
             alignment: .center
         )
         .shadow(color: Color.gray.opacity(0.8), radius: 5, x: 0, y: 5)
@@ -136,9 +154,8 @@ struct HomeView: View {
     @State private var selectedCategory = 0
     @State private var cityName = ""
     
-    let weather = Weather()
-    
     @ObservedObject var homeViewModel = HomeViewModel()
+    @ObservedObject var weeklyWeatherViewModel = WeeklyWeatherViewModel()
 
 
     let categories = ["Today", "Tomorrow", "Next Week"]
@@ -161,7 +178,7 @@ struct HomeView: View {
             
             Spacer()
             
-            Text("Next 15 Days")
+            Text("Next 5 Days")
                 .font(.system(size: 20))
                 .fontWeight(.bold)
                 .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
@@ -170,8 +187,8 @@ struct HomeView: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
-                    ForEach(0..<15) {_ in
-                        NextDaysView(days: "", color: self.arrayOfColors.randomElement()!, weather: self.weather)
+                    ForEach(weeklyWeatherViewModel.dataSource) { dailyWeather in
+                        NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
                     }
                 }
                 .padding(.leading, 10)
@@ -191,6 +208,8 @@ struct HomeView: View {
         )
         .navigationBarItems(trailing:
             Button(action: {
+                
+//                print("TESTING:\(self.weeklyWeatherViewModel)")
 //                self.homeViewModel.fetchWeatherData()
             }, label: {
                 Text("TEST")
@@ -209,12 +228,5 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }
-}
-
-
-struct Weather {
-    let temperature = "25°"
-    let label = "Clouds & sun"
-    let humidity = "35°"
 }
 

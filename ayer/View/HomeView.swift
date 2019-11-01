@@ -102,15 +102,24 @@ struct NextDaysCard: View {
                 .font(.title)
             
             HStack(spacing: 30) {
-                Text("\(dailyWeather.minTemperature)")
-                    .foregroundColor(viviColor)
-                    .font(.system(size: 20))
-                    .fontWeight(.bold)
-                
-                Text("\(dailyWeather.maxTemperature)")
-                    .foregroundColor(.white)
-                    .font(.system(size: 20))
-                    .fontWeight(.bold)
+                VStack {
+                    Text("Min")
+                        .foregroundColor(.white)
+                        .font(.footnote)
+                    Text("\(dailyWeather.minTemperature)")
+                        .foregroundColor(viviColor)
+                        .font(.system(size: 20))
+                        .fontWeight(.bold)
+                }
+                VStack {
+                    Text("Max")
+                        .foregroundColor(.white)
+                        .font(.footnote)
+                    Text("\(dailyWeather.maxTemperature)")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                        .fontWeight(.bold)
+                }
             }
         }.onAppear(perform: {
             self.iconName = self.dailyWeather.icon

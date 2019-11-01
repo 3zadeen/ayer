@@ -11,7 +11,7 @@ import SwiftUI
 
 struct WeatherData : Decodable {
     
-    let date    : Int
+    let date    : Date
     let main    : Main
     let weather : [WeatherCondition]
     let name    : String
@@ -71,7 +71,7 @@ struct City : Decodable {
 }
 
 
-struct WeatherList : Decodable {
+struct WeeklyWeatherList : Decodable {
     
     let list : [WeatherData]
     let city : City
@@ -79,5 +79,26 @@ struct WeatherList : Decodable {
     enum CodingKeys: String, CodingKey {
         case list = "list"
         case city = "city"
+    }
+    
+    struct WeatherData : Decodable {
+        
+        let date    : Date
+        let main    : Main
+        let weather : [WeatherCondition]
+        
+        enum CodingKeys: String, CodingKey {
+            case date    = "dt"
+            case main    = "main"
+            case weather = "weather"
+        }
+        
+        init?() {
+            return nil
+        }
+    }
+    
+    init?() {
+        return nil
     }
 }

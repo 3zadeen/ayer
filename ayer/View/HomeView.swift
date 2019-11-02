@@ -106,7 +106,7 @@ struct NextDaysCard: View {
                         .font(.footnote)
                     Text("\(dailyWeather.minTemperature)")
                         .foregroundColor(viviColor)
-                        .font(.system(size: 20))
+                        .font(.system(size: 18))
                         .fontWeight(.bold)
                 }
                 VStack {
@@ -115,7 +115,7 @@ struct NextDaysCard: View {
                         .font(.footnote)
                     Text("\(dailyWeather.maxTemperature)")
                         .foregroundColor(.white)
-                        .font(.system(size: 20))
+                        .font(.system(size: 18))
                         .fontWeight(.bold)
                 }
             }

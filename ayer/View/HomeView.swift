@@ -213,9 +213,13 @@ struct HomeView: View {
                 .padding(.bottom, 20)
             
             ScrollView(.horizontal) {
-                HStack(spacing: 10) {
-                    ForEach(homeViewModel.dataSource) { dailyWeather in
-                        NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
+                HStack(alignment: .center, spacing: 10) {
+                    if (homeViewModel.dataSource.isEmpty) {
+                        emptySection
+                    } else {
+                        ForEach(homeViewModel.dataSource) { dailyWeather in
+                            NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
+                        }
                     }
                 }
                 .padding(.leading, 10)
@@ -224,26 +228,24 @@ struct HomeView: View {
                 Spacer(minLength: 20)
             }
             .frame(height: 190)
+//            .padding(.leading, 10)
+//            .padding(.trailing, 10)
             
             Spacer()
             
         }
         .navigationBarTitle(homeViewModel.name)
-//        .onAppear(perform: SetNavBarTitle)
-//        .navigationBarItems(trailing:
-//            Button(action: {
-//                print("TEST")
-//            }) {
-//                Image(systemName: SFSymbolName.magnifyingGlass)
-//            }
-//
-//        )
         .navigationBarBackButtonHidden(true)
     }
     
-//    func SetNavBarTitle() {
-//        cityName = homeViewModel.name
-//    }
+    var emptySection: some View {
+        Section {
+            Text("No data 🙁")
+                .font(.largeTitle)
+                .foregroundColor(.purple)
+                .padding(110)
+        }
+    }
 }
 
 

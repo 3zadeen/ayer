@@ -59,15 +59,15 @@ final class HomeViewModel: ObservableObject {
             .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
           .sink { searchText in
             self.fetchCurrentWeatherData(city: searchText)
+            self.fetchWeeklyWeatherData(city: searchText)
         })
         
         fetchCurrentWeatherData(city: city)
-        fetchWeeklyWeatherData()
+        fetchWeeklyWeatherData(city: city)
     }
     
     
     func fetchCurrentWeatherData(city: String) {
-        print(city)
         let userLocationCoordinates = UserLocationCoordinate(latitude: 3, longitude: 101)
         NetworkingService.fetchCurrentWeatherData(userLocationCordinates: userLocationCoordinates, forCity: city) { [weak self] response in
             
@@ -85,10 +85,10 @@ final class HomeViewModel: ObservableObject {
     }
     
     
-    func fetchWeeklyWeatherData() {
+    func fetchWeeklyWeatherData(city: String) {
         let userLocationCoordinates = UserLocationCoordinate(latitude: 3, longitude: 101)
         
-        NetworkingService.fetchWeeklyWeatherData(userLocationCordinates: userLocationCoordinates)
+        NetworkingService.fetchWeeklyWeatherData(userLocationCordinates: userLocationCoordinates, forCity: city)
             .map { response in
                 response.list.map(DailyWeatherViewModel.init)
             }

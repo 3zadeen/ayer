@@ -62,16 +62,20 @@ class NetworkingService {
     }
     
     
-    static func fetchWeeklyWeatherData(userLocationCordinates: UserLocationCoordinate) -> AnyPublisher<WeeklyWeatherList, APIError> {
+    static func fetchWeeklyWeatherData(userLocationCordinates: UserLocationCoordinate, forCity city: String) -> AnyPublisher<WeeklyWeatherList, APIError> {
         
         let path = "/data/2.5/\(Query.forecast)"
         var endpoint = Endpoint(path: path)
         
-        let lat = String(userLocationCordinates.latitude)
-        let lon = String(userLocationCordinates.longitude)
+        if (city.isEmpty) {
+            let lat = String(userLocationCordinates.latitude)
+            let lon = String(userLocationCordinates.longitude)
+            endpoint.queryItems.append(URLQueryItem(name: "lat", value: lat))
+            endpoint.queryItems.append(URLQueryItem(name: "lon", value: lon))
+        } else {
+            endpoint.queryItems.append(URLQueryItem(name: "q", value: city))
+        }
         
-        endpoint.queryItems.append(URLQueryItem(name: "lat", value: lat))
-        endpoint.queryItems.append(URLQueryItem(name: "lon", value: lon))
         endpoint.queryItems.append(URLQueryItem(name: "units", value: TemperatureUnit.metric.rawValue))
         
         guard let url = endpoint.url else {

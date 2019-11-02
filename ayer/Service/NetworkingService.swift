@@ -21,15 +21,20 @@ class NetworkingService {
     }
     
     
-    static func fetchCurrentWeatherData(userLocationCordinates: UserLocationCoordinate, completionHandler: @escaping Handler<WeatherData>) {
+    static func fetchCurrentWeatherData(userLocationCordinates: UserLocationCoordinate, forCity city: String, completionHandler: @escaping Handler<WeatherData>) {
+        
         let path = "/data/2.5/\(Query.weather)"
         var endpoint = Endpoint(path: path)
         
-        let lat = String(userLocationCordinates.latitude)
-        let lon = String(userLocationCordinates.longitude)
+        if (city.isEmpty) {
+            let lat = String(userLocationCordinates.latitude)
+            let lon = String(userLocationCordinates.longitude)
+            endpoint.queryItems.append(URLQueryItem(name: "lat", value: lat))
+            endpoint.queryItems.append(URLQueryItem(name: "lon", value: lon))
+        } else {
+            endpoint.queryItems.append(URLQueryItem(name: "q", value: city))
+        }
         
-        endpoint.queryItems.append(URLQueryItem(name: "lat", value: lat))
-        endpoint.queryItems.append(URLQueryItem(name: "lon", value: lon))
         endpoint.queryItems.append(URLQueryItem(name: "units", value: TemperatureUnit.metric.rawValue))
         
         guard let url = endpoint.url else {return}

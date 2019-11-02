@@ -10,4 +10,5 @@ import Foundation
 
 struct SFSymbolName {
     static let magnifyingGlass = "magnifyingglass"
+    static let cancel = "multiply.circle"
 }

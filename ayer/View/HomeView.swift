@@ -12,7 +12,7 @@ import SwiftUI
 
 struct WeatherDetails: View {
     
-    var weatherData: HomeViewModel
+    @ObservedObject var weatherData: HomeViewModel
     
     let viviColor = Color(red: 168/255, green: 162/255, blue: 255/255)
     
@@ -42,7 +42,7 @@ struct WeatherDetails: View {
 
 struct TodaysWeatherCard: View {
     
-    var weatherData: HomeViewModel
+    @ObservedObject var weatherData: HomeViewModel
     
     var body: some View {
         Image("cloud_sun")
@@ -145,6 +145,35 @@ struct NextDaysView: View {
     }
 }
 
+struct SearchBarView: View {
+    @Binding var text: String
+    
+    var body: some View {
+        ZStack {
+            HStack {
+                Image(systemName: SFSymbolName.magnifyingGlass)
+                
+                TextField("Try London...", text: $text)
+                
+                if !text.isEmpty {
+                    Button(action: {
+                        self.text = ""
+                    }) {
+                        Image(systemName: SFSymbolName.cancel)
+                    }
+                }
+            }
+            .padding(.trailing, 10)
+            .padding(.leading, 10)
+        }
+        .frame(height: 40)
+        .background(Color(red: 237/255, green: 242/255, blue: 246/255, opacity: 0.8))
+        .cornerRadius(20)
+        .padding(.trailing, 20)
+        .padding(.leading, 20)
+    }
+}
+
 
 struct CustomColors {
     static let mixedGreen = UIColor.init(netHex: 0x28E0AE)
@@ -162,13 +191,14 @@ struct HomeView: View {
     @State private var cityName = ""
     
     @ObservedObject var homeViewModel = HomeViewModel()
-    @ObservedObject var weeklyWeatherViewModel = WeeklyWeatherViewModel()
     
     let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
     
     var body: some View {
+        
         VStack(alignment: .leading, spacing: 20) {
-            Spacer()
+            
+            SearchBarView(text: $homeViewModel.city)
             
             TodaysWeatherCard(weatherData: homeViewModel)
                 .padding(.leading, 20)
@@ -184,7 +214,7 @@ struct HomeView: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
-                    ForEach(weeklyWeatherViewModel.dataSource) { dailyWeather in
+                    ForEach(homeViewModel.dataSource) { dailyWeather in
                         NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
                     }
                 }
@@ -198,17 +228,22 @@ struct HomeView: View {
             Spacer()
             
         }
-        .navigationBarTitle(cityName)
-        .onAppear(perform: SetNavBarTitle)
-        .navigationBarItems(trailing:
-            Image(systemName: SFSymbolName.magnifyingGlass)
-        )
+        .navigationBarTitle(homeViewModel.name)
+//        .onAppear(perform: SetNavBarTitle)
+//        .navigationBarItems(trailing:
+//            Button(action: {
+//                print("TEST")
+//            }) {
+//                Image(systemName: SFSymbolName.magnifyingGlass)
+//            }
+//
+//        )
         .navigationBarBackButtonHidden(true)
     }
     
-    func SetNavBarTitle() {
-        cityName = homeViewModel.name
-    }
+//    func SetNavBarTitle() {
+//        cityName = homeViewModel.name
+//    }
 }
 
 

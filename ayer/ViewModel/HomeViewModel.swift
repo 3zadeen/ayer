@@ -15,6 +15,12 @@ final class HomeViewModel: ObservableObject {
     
     @Published var weatherData = WeatherData()
     
+    @Published var dataSource: [DailyWeatherViewModel] = []
+    
+    private var disposables = Set<AnyCancellable>()
+    
+    @Published var city: String = ""
+    
     var temperature: String {
         return String(format: "%.1f°", weatherData?.main.temperature ?? 0)
     }
@@ -40,18 +46,30 @@ final class HomeViewModel: ObservableObject {
         return desc.capitalizingFirstLetter()
     }
     
+    private var cancellable: AnyCancellable? = nil
     
     var name: String {
         return weatherData?.name ?? ""
     }
     
     init() {
-        fetchCurrentWeatherData()
+        
+        cancellable = AnyCancellable(
+        $city.removeDuplicates()
+            .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
+          .sink { searchText in
+            self.fetchCurrentWeatherData(city: searchText)
+        })
+        
+        fetchCurrentWeatherData(city: city)
+        fetchWeeklyWeatherData()
     }
     
-    func fetchCurrentWeatherData() {
+    
+    func fetchCurrentWeatherData(city: String) {
+        print(city)
         let userLocationCoordinates = UserLocationCoordinate(latitude: 3, longitude: 101)
-        NetworkingService.fetchCurrentWeatherData(userLocationCordinates: userLocationCoordinates) { [weak self] response in
+        NetworkingService.fetchCurrentWeatherData(userLocationCordinates: userLocationCoordinates, forCity: city) { [weak self] response in
             
             guard let self = self else {return}
             
@@ -65,4 +83,31 @@ final class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    func fetchWeeklyWeatherData() {
+        let userLocationCoordinates = UserLocationCoordinate(latitude: 3, longitude: 101)
+        
+        NetworkingService.fetchWeeklyWeatherData(userLocationCordinates: userLocationCoordinates)
+            .map { response in
+                response.list.map(DailyWeatherViewModel.init)
+            }
+            .map(Array.uniqued)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] value in
+                guard let self = self else { return }
+                switch value {
+                case .failure:
+                  self.dataSource = []
+                case .finished:
+                  break
+                }
+            }, receiveValue: { [weak self] weatherData in
+                guard let self = self else { return }
+                self.dataSource = weatherData()
+            })
+            .store(in: &disposables)
+    }
+    
+    
 }

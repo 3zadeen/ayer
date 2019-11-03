@@ -196,43 +196,42 @@ struct HomeView: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 20) {
-            
-            SearchBarView(text: $homeViewModel.city)
-            
-            TodaysWeatherCard(weatherData: homeViewModel)
-                .padding(.leading, 20)
-            
-            Spacer()
-            
-            Text("Next 5 Days")
-                .font(.system(size: 20))
-                .fontWeight(.bold)
-                .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
-                .padding(.leading, 20)
-                .padding(.bottom, 20)
-            
-            ScrollView(.horizontal) {
-                HStack(alignment: .center, spacing: 10) {
-                    if (homeViewModel.dataSource.isEmpty) {
-                        emptySection
-                    } else {
-                        ForEach(homeViewModel.dataSource) { dailyWeather in
-                            NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                
+                SearchBarView(text: $homeViewModel.city)
+                
+                TodaysWeatherCard(weatherData: homeViewModel)
+                    .padding(.leading, 20)
+                
+                Spacer()
+                
+                Text("Next 5 Days")
+                    .font(.system(size: 20))
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(red: 19/255, green: 14/255, blue: 81/255))
+                    .padding(.leading, 20)
+                    .padding(.bottom, 20)
+                
+                ScrollView(.horizontal) {
+                    HStack(alignment: .center, spacing: 10) {
+                        if (homeViewModel.dataSource.isEmpty) {
+                            emptySection
+                        } else {
+                            ForEach(homeViewModel.dataSource) { dailyWeather in
+                                NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
+                            }
                         }
                     }
+                    .padding(.leading, 10)
+                    .padding(.trailing, 10)
+                    
+                    Spacer(minLength: 20)
                 }
-                .padding(.leading, 10)
-                .padding(.trailing, 10)
+                .frame(height: 190)
                 
-                Spacer(minLength: 20)
+                Spacer()
             }
-            .frame(height: 190)
-//            .padding(.leading, 10)
-//            .padding(.trailing, 10)
-            
-            Spacer()
-            
         }
         .navigationBarTitle(homeViewModel.name)
         .navigationBarBackButtonHidden(true)

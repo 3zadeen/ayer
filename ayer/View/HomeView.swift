@@ -40,7 +40,7 @@ struct WeatherDetails: View {
     }
 }
 
-struct TodaysWeatherCard: View {
+struct CurrentWeatherView: View {
     
     @ObservedObject var weatherData: HomeViewModel
     
@@ -182,6 +182,7 @@ struct CustomColors {
     static let sky = UIColor.init(netHex: 0x0090FF)
     static let red = UIColor.init(netHex: 0xDC0000)
     static let darkBlue = UIColor.init(netHex: 0x0051FF)
+    static let blue = UIColor.init(netHex: 0x6030fc)
 }
 
 
@@ -192,8 +193,6 @@ struct HomeView: View {
     
     @ObservedObject var homeViewModel = HomeViewModel()
     
-    let arrayOfColors = [CustomColors.mixedGreen, CustomColors.pink, CustomColors.yellow, CustomColors.sky, CustomColors.red, CustomColors.darkBlue]
-    
     var body: some View {
         
         ScrollView {
@@ -201,7 +200,7 @@ struct HomeView: View {
                 
                 SearchBarView(text: $homeViewModel.city)
                 
-                TodaysWeatherCard(weatherData: homeViewModel)
+                CurrentWeatherView(weatherData: homeViewModel)
                     .padding(.leading, 20)
                 
                 Spacer()
@@ -219,7 +218,7 @@ struct HomeView: View {
                             emptySection
                         } else {
                             ForEach(homeViewModel.dataSource) { dailyWeather in
-                                NextDaysView(color: self.arrayOfColors.randomElement()!, dailyWeather: dailyWeather)
+                                NextDaysView(color: CustomColors.blue, dailyWeather: dailyWeather)
                             }
                         }
                     }
@@ -241,7 +240,7 @@ struct HomeView: View {
         Section {
             Text("No data 🙁")
                 .font(.largeTitle)
-                .foregroundColor(.purple)
+                .foregroundColor(.black)
                 .padding(110)
         }
     }

@@ -17,9 +17,9 @@ final class HomeViewModel: ObservableObject {
     
     @Published var dataSource: [DailyWeatherViewModel] = []
     
-    private var disposables = Set<AnyCancellable>()
-    
     @Published var city: String = ""
+    
+    private var disposables = Set<AnyCancellable>()
     
     var temperature: String {
         return String(format: "%.1f°", weatherData?.main.temperature ?? 0)
@@ -56,7 +56,7 @@ final class HomeViewModel: ObservableObject {
         
         cancellable = AnyCancellable(
         $city.removeDuplicates()
-            .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
           .sink { searchText in
             self.fetchCurrentWeatherData(city: searchText)
             self.fetchWeeklyWeatherData(city: searchText)
